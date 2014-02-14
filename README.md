@@ -15,3 +15,4 @@ where provide modules to interact with database.<br>
 ....*views is the folder contains views... obviously..<br>
 ....*public folder contains relevent CSS, Javascript, img, and so on, which support rendering of a view. there are exposed to clients.<br>
 ....*node_modules folder.. you can have to worry about it. it just contains all dependencies. for example express, mongodb, mongoose and jade.
+
