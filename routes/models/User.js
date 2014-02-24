@@ -14,7 +14,9 @@ var userSchema = new Schema({
     email : String,
     bookIds : [ObjectId],
     cart : [ObjectId],
-    notification : {type : boolean, default : false}
+    notification : {type : Boolean, default : false},
+    activated : Boolean,
+    confirmationCode : String;
 });
 
 
@@ -73,6 +75,10 @@ User.prototype.updateNotification = function(id, newNotice, callback){
     UserModel.findById(id).update({notification : newNotice}, callback);
 };
 
+//activate or disactivate a user
+User.prototype.updateStatus = function(id, status, callback){
+    UserNodel.findById(id).update({activated : status}, callback);
+};
 
 module.exports = User;
 

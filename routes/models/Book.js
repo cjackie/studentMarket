@@ -1,6 +1,8 @@
 var mongoose = require('mongoose');
 var db = mongoose.connect('mongodb://localhost/studentMarket', function(err){
-    console.error('cannot connect to db');
+    if (err){
+        console.error('error occured when connecting to db');
+    }
 }); 
 
 //use for debug
