@@ -38,7 +38,7 @@ app.get('/signup', routes.signup);
 app.get('/login', routes.login);
 app.post('/register', routes.register);
 app.get('/infoboard', routes.infoDisplay);
-app.get('/confirmation/:activateSequence', routes.confirm);
+app.get('/confirmation/:activateSequence/:username', routes.confirm);
 app.post('/login2', routes.login2);
 app.get('/myprofile', routes.profile);
 app.get('/market', routes.market);
