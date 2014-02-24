@@ -25,7 +25,7 @@ var bookSchema = new Schema({
 });
 
 //sort the books by date. reverse order, which means from latest to oldest
-bookSchema.index({ createdDate : -1});
+bookSchema.index({ createdDate : 1});
 //for better performance
 bookSchema.set('autoIndex', false);
 
@@ -51,7 +51,7 @@ Book.prototype.findById = function(id, callback){
 
 //get most recent books. number of book is specified by @num
 Book.prototype.getSome = function(num, callback){
-    BookModel.find({}).limit(num).exec(callback);
+    BookModel.find({}).sort({createdDate : -1}).limit(num).exec(callback);
 };
 
 
@@ -70,7 +70,7 @@ Book.prototype.addBook = function(newBook, callback){
 Book.prototype.searchBooks = function(criteria, callback){
     BookModel.where({
         type : criteria.type,
-        department : cirteria.department,
+        department : criteria.department,
         classNum : criteria.classNum
     }).where('createdDate')
       .gt(criteria.createdDate)
