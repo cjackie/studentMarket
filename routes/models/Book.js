@@ -5,9 +5,6 @@ var db = mongoose.connect('mongodb://localhost/studentMarket', function(err){
     }
 }); 
 
-//use for debug
-var errorDisplay = console.error;
-
 var Schema = mongoose.Schema;
 var ObjectId = mongoose.Schema.ObjectId;
 /*
