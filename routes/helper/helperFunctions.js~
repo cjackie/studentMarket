@@ -1,8 +1,0 @@
-
-exports.checkSession = function(){
-    if (req.session.id){
-        return true;
-    } else {
-        return false;
-    }
-};
