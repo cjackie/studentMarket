@@ -1,9 +1,7 @@
 var mongoose = require('mongoose');
-var db = mongoose.connect('mongodb://localhost:27017/studentMarket', function(err){
-    console.error('cannot connect to db');
-});
 
 var Schema = mongoose.Schema;
+var ObjectId = mongoose.Schema.ObjectId;
 
 /*
   data structure of an user
@@ -13,10 +11,10 @@ var userSchema = new Schema({
     password : String,
     email : String,
     bookIds : [ObjectId],
-    cart : [ObjectId],
+    cart : [ObjectId], 
     notification : {type : Boolean, default : false},
     activated : Boolean,
-    confirmationCode : String;
+    confirmationCode : String 
 });
 
 
@@ -26,16 +24,21 @@ userSchema.set('autoIndex', false);
 
 var UserModel = mongoose.model('User', userSchema);
 
-var User = {};
+var User = function(){};
+
+//export ObjectId
+User.ObjectId = require('mongodb').ObjectID;
 
 //find the user by id
 User.prototype.findById = function(id, callback){
     UserModel.findById(id).exec(callback);
 };
 
-//find the user by name
+/*
+  find by name.
+ */
 User.prototype.findByName = function(name, callback){
-    UserModel.where('username').equals(name).exec(callback);
+    UserModel.where('username').equals(name).findOne().exec(callback);
 };
 
 /*
@@ -47,8 +50,8 @@ User.prototype.findByName = function(name, callback){
  */
 User.prototype.addUser = function(newUser, callback){
     var user = new UserModel(newUser);
-    user.save().exec(callback);
-}
+    user.save(callback);
+};
 
 //update password
 User.prototype.updatePassword = function(id, newPassword, callback){
@@ -65,11 +68,6 @@ User.prototype.updateBooks = function(id, newBooks, callback){
     UserModel.findById(id).update({bookIds : newBooks}, callback);
 };
 
-//update cart of a user
-User.prototype.updateCart = function(id, newCart, callback){
-    UserModel.findById(id).update({cart : newCart}, callback);
-};
-
 //update notification of a user
 User.prototype.updateNotification = function(id, newNotice, callback){
     UserModel.findById(id).update({notification : newNotice}, callback);
@@ -77,7 +75,7 @@ User.prototype.updateNotification = function(id, newNotice, callback){
 
 //activate or disactivate a user
 User.prototype.updateStatus = function(id, status, callback){
-    UserNodel.findById(id).update({activated : status}, callback);
+    UserModel.findById(id).update({activated : status}, callback);
 };
 
 module.exports = User;
