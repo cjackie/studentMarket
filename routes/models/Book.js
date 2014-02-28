@@ -74,6 +74,11 @@ Book.prototype.searchBooks = function(criteria, callback){
       .exec(callback);
 };
 
+//find books by id, return an array of books
+Book.prototype.findBooks = function(bookIds, callback){
+    BookModel.find({'_id' : { $in : bookIds }}, callback);
+};
+
 //export module
 module.exports = Book;    
                                  
