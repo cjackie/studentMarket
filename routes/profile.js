@@ -2,6 +2,19 @@
   this script provide data for ajax calls from myprogile page
  */
 
+//models
+var Book = require('./models/Book');
+var User = require('./models/User');
+var books = new Book();
+var users = new User();
+
+
+//ObjectId type
+var ObjectId = User.ObjectId;
+
+//helper functions
+var helper = require('./helper/helperFuncitons');
+
 
 
 /*
@@ -37,7 +50,7 @@ exports.addBook = function(req, res){
 
     
     if (!id){
-        res.redirect('login');
+        res.redirect('/login');
     }
     
     if (!price){
@@ -66,7 +79,7 @@ exports.addBook = function(req, res){
     //add the book to DB
     books.addBook(newBook, function(err){
         if (err){
-            res.redirect('error');
+            res.redirect('/error');
         }
 
         //update user book list
@@ -83,7 +96,7 @@ exports.deleteBook = function(req, res){
     var id = req.session.id;
 
     if (!id){
-        res.redirect('login');
+        res.redirect('/login');
     }
     
     //delete the book from book database
