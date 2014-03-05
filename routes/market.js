@@ -13,7 +13,7 @@ var users = new User();
   return array of books based on search criteria
  */
 exports.getBooks = function(req, res){
-    var id = req.session._id;
+    var id = req.session.id;
     var criteria = req.query.criteria;
     
     if (!id){
@@ -33,7 +33,7 @@ exports.getBooks = function(req, res){
   add the book id to user's card, return {success: yes or no}
  */
 exports.addToCart = function(req, res){
-    var id = req.session._id;
+    var id = req.session.id;
     var bookId = req.query.bookId;
 
     if (!id || !bookId){
