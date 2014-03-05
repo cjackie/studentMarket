@@ -10,4 +10,3 @@ The design follows MVC design paradigm:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Views is the folder contains views... obviously..<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Public folder contains relevent CSS, Javascript, img, and so on, which support rendering of a view. They are exposed to clients.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;node_modules folder.. We don't need to worry about it. It just contains all dependencies. For example express, mongodb, mongoose and jade.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;The data folder is where database resides. We don't need to worry about it.
