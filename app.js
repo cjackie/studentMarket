@@ -55,7 +55,8 @@ app.get('/market/ajax/getBooks', market.getBooks);
 app.get('/market/ajax/addToCard', market.addToCard);
 
 //ajax requests for cart page
-app.post("cart/ajax/submit", cart,submiet);
+app.post('/cart/ajax/submit', cart.submit);
+app.get('/cart/ajax/deleteItem', cart.deleteItem);
 
 
 
