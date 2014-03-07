@@ -18,19 +18,21 @@ var transport = require('nodemailer').createTransport('SMTP', {
 /*
   mailer provide functions to upper layer
  */
-var mailer = function(){
+var mailer = {
     /*
       data has properties subject, to, text.
      */
-    sendMail : function(data, callback){
-        transport.sendMail({
+    sendMail: function(data, callback){
+        var temp = {
             from : officialEmail,
-            to : data.to
+            to : data.to,
             subject : data.subject,
             text : data.text
-        }, callback);
+        };
+        
+        transport.sendMail(temp, callback);
     }
-}
+};
 
 
 //export

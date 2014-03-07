@@ -13,7 +13,7 @@ var users = new User();
   delete a book from user's cart. return {success : yes or no}
  */
 exports.deleteItem = function(req, res){
-    var id = req.session.id
+    var id = req.session.id;
     var bookId = req.query.bookId;
 
     if (!id || !bookId){
@@ -65,8 +65,7 @@ exports.submit = function(req, res){
 
     //make email content
     var makeText = function(username, email,bookNames,types){
-        var text = username + ' wants your book, contact him: ' + email + '\n'
-            + 'books requested:\n';
+        var text = username + ' wants your book, contact him: ' + email + '\n' + 'books requested:\n';
         for (var i = 0; i < types.length; i++){
             text += bookNames[i] + ' for' + types[i] + ' \n';
         }
@@ -81,7 +80,7 @@ exports.submit = function(req, res){
         
         //ok, use for loop.. which I'm familliar with.
         for (var i = 0; i < receivers.length; i++){
-            if (!receivers[i].email in uniqueEmails){
+            if (!(receivers[i].email in uniqueEmails)){
                 uniqueReceivers[i].name = receivers[i].name;
                 uniqueReceivers[i].email = receivers[i].email;
                 uniqueReceivers[i].bookNames = [receivers[i].bookName];
@@ -117,6 +116,7 @@ exports.submit = function(req, res){
                 }
                 mailer.sendMail(data);
             }
+        });
     };
 
     //query

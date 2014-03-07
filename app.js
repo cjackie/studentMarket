@@ -9,6 +9,7 @@ var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
 
+
 //routes to handle ajax or other pages
 var market = require('./routes/market');
 var profile = require('./routes/profile');
@@ -25,8 +26,14 @@ app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
+//enable session
+app.use(express.cookieParser());
+app.use(express.session({ secret: 'p!550ff'}));
+
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
+
+//enable session
 
 // development only
 if ('development' == app.get('env')) {
@@ -52,11 +59,14 @@ app.post('/myprofile/ajax/changePassword', profile.changePassword);
 
 //ajax requests for market page
 app.get('/market/ajax/getBooks', market.getBooks);
-app.get('/market/ajax/addToCard', market.addToCard);
+app.get('/market/ajax/addToCard', market.addToCart);
 
 //ajax requests for cart page
 app.post('/cart/ajax/submit', cart.submit);
 app.get('/cart/ajax/deleteItem', cart.deleteItem);
+
+//error
+app.get('/error', routes.error);
 
 
 

@@ -1,0 +1,53 @@
+var Book = require('./Book.js');
+
+var book1 = {
+    type : 'buy',
+    department : 'AMS',
+    classNum : '123',
+    title : 'a good book',
+    author : 'chaojie',
+    price : -1,
+    createdDate : (new Date()) - 1000000,
+    ownerName : 'Jack'
+};
+
+var book2 = {
+    type : 'buy',
+    department : 'ESE',
+    classNum : '124',
+    title : 'a good book2',
+    author : 'chaojie',
+    price : 1,
+    createdDate : (new Date()) - 100000,
+    ownerName : 'Jack'
+};
+
+var book3 = {
+    type : 'buy',
+    department : 'CSE',
+    classNum : '125',
+    title : 'a good book3',
+    author : 'will',
+    price : 55,
+    createdDate : (new Date()) - 1000,
+    ownerName : 'Jack'
+};
+
+var book4 = {
+    type : 'sell',
+    department : 'MAT',
+    classNum : '123',
+    title : 'a good book',
+    author : 'chaojie',
+    price : 2,
+    createdDate : (new Date()),
+    ownerName : 'Jack'
+};
+
+exports.book1 = book1;
+exports.book2 = book2;
+exports.book3 = book3;
+exports.book4 = book4;
+exports.Book = Book;
+
+Book

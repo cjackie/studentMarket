@@ -17,7 +17,7 @@ var ObjectId = User.ObjectId;
 var mailer = require('./helper/mailer');
 
 //helper functions
-var helper = require('./helper/helperFuncitons');
+var helper = require('./helper/helperFunctions');
     
 /*
   pages
@@ -27,7 +27,7 @@ exports.index = function(req, res){
 };
 
 exports.signup = function(req, res){
-    res.render('singup');
+    res.render('signup');
 };
 
 exports.login = function(req, res){
@@ -53,6 +53,7 @@ exports.register = function(req, res){
         if (data) {
             //name has been taken
             redirect('/error');
+            return;
         } else {
             users.addUser({
                 username : username,
@@ -99,16 +100,22 @@ exports.confirm = function(req, res){
     var sequence = req.param.activatedSequence;
     var username = req.param.username;
     var activateCB = function(err, user){
+        if (err || !user){
+            res.redirect('/error');
+            return;
+        }
         if (user.confirmationCode == sequence){
             users.updateStatus(user._id, true, function(err){
                 if (err){
                     redirect('/error');
+                    return;
                 } else {
                     res.render('confirmation');
                 }
             });
         } else {
-            redirect('/error');
+            res.redirect('/error');
+            return
         }
     };
    
@@ -150,6 +157,7 @@ exports.profile = function(req, res){
     var render = function(err, user){
         if (err || !user){
             res.redirect('/error');
+            return;
         }
         bookIds = user.bookIds;
         if (bookIds.length > 0){
@@ -171,6 +179,7 @@ exports.profile = function(req, res){
     
     if (!id){
         res.redirect('/login');
+        return;
     } else {
         users.findById(id, render);
     }
@@ -185,11 +194,13 @@ exports.market = function(req, res){
 
     if (!id){
         res.redirect('/login');
+        return;
     }
 
     users.findById(id, function(err, user){
         if (err || !user){
             res.redirect('/error');
+            return;
         }
 
         res.render('market', { cartNum : user.cart.lenght });
@@ -205,16 +216,19 @@ exports.cart = function(req, res){
 
     if (!id){
         res.redirect('/login');
+        return;
     }
 
     users.findById(id, function(err, user){
         if (err || !user){
             res.redirect('/error');
+            return;
         }
         
         books.findBooks(user.cart, function(err, booksInCart){
             if (!booksInCart || err){
                 res.redirect('/error');
+                return;
             }
 
             res.render('cart', booksInCart);
@@ -231,9 +245,17 @@ exports.logout = function(req, res){
 
     if (!id){
         res.redirect('login');
+        return;
     }
 
     req.session.destroy();
     res.render('logout');
+};
+
+/*
+  error page
+ */
+exports.error = function(req, res){
+    res.render('error');
 };
 

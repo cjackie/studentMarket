@@ -13,7 +13,7 @@ var users = new User();
 var ObjectId = User.ObjectId;
 
 //helper functions
-var helper = require('./helper/helperFuncitons');
+var helper = require('./helper/helperFunctions');
 
 
 
