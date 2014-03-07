@@ -10,7 +10,6 @@
     "express": "3.4.8",
     "jade": "*",
     "mongodb": "*",
-    "mongoose": "3.x",
-    "redis": "*"
+    "mongoose": "3.x"
   }
 }
