@@ -75,7 +75,8 @@ User.prototype.updateNotification = function(id, newNotice, callback){
 
 //activate or disactivate a user
 User.prototype.updateStatus = function(id, status, callback){
-    UserModel.findById(id).update({activated : status}, callback);
+    console.log(id + status);
+    UserModel.where({_id : id}).update({$set : {activated : status}}, callback);
 };
 
 module.exports = User;

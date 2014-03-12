@@ -1,7 +1,6 @@
 /*
   this script provide data for ajax calls from myprogile page
  */
-
 //models
 var Book = require('./models/Book');
 var User = require('./models/User');
@@ -25,7 +24,7 @@ var helper = require('./helper/helperFunctions');
  */
 
 exports.addBook = function(req, res){
-    var id = req.session.id;
+    var id = req.session.userId;
     var type = req.query.type;
     var department = req.query.department;
     var classNum = req.query.classNum;
@@ -33,24 +32,38 @@ exports.addBook = function(req, res){
     var author = req.query.author;
     var price = req.query.price;
     var bookId;
-    var bookIds;
+    
     var addBookId = function(err, user){
         if (err || !user){
             res.redirect('/error');
+            return;
         }
-
-        bookIds = user.bookIds + bookId;
-        users.updateBooks(id, bookIds, function(err){
+        
+        user.bookIds.push(bookId);
+        user.save(function(err){
             if (err){
+
                 res.redirect('/error');
+                return;
             }
-            res.send(JSON.stringify({success : 'yes'}));
+            
+            newBook.ownerName = user.username;
+            books.addBook(newBook, function(err){
+                if (err){
+                    res.redirect('/error');
+                    return;
+                } else {
+                    res.send(JSON.stringify({success : 'yes'}));
+                }   
+            });        
         });
+
+        //add book to DB
     };
 
-    
     if (!id){
         res.redirect('/login');
+        return;
     }
     
     if (!price){
@@ -60,9 +73,10 @@ exports.addBook = function(req, res){
     //if there is one item missing. error
     if (!(department && classNum && title && author) || (type != "buy" && type != "sell")){
         res.redirect('/error');
+        return;
     }
 
-    //prepare data
+    //prepare data. add ownerName later
     bookId = new ObjectId();
     var newBook = {
         _id : bookId,
@@ -73,18 +87,10 @@ exports.addBook = function(req, res){
         author : author,
         price : price,
         createdDate : new Date(),
-        ownerId : id
-    }
-
-    //add the book to DB
-    books.addBook(newBook, function(err){
-        if (err){
-            res.redirect('/error');
-        }
-
-        //update user book list
-        users.findById(id, addBookId);
-    });
+        ownerName : null
+    };
+    //update user book list
+    users.findById(id, addBookId);
 };
 
 /*
@@ -93,31 +99,37 @@ exports.addBook = function(req, res){
  */
 exports.deleteBook = function(req, res){
     var bookId = req.query.bookId;
-    var id = req.session.id;
-
+    var id = req.session.userId;
+    
     if (!id){
         res.redirect('/login');
+        return;
     }
-    
     //delete the book from book database
     books.deleteById(bookId, function(err){
         if (err){
             res.redirect('/error');
+            return;
         }
-
         //delete the book from the list
-        users.findById(id, function(err, data){
-            if (err || !data){
+        users.findById(id, function(err, user){
+            if (err || !user){
                 res.redirect('/error');
+                return;
             }
 
-            var bookIds = data.bookIds;
-            if (bookId in bookIds){
-                bookIds.splice(bookIds.indexOf(bookId), 1);
+            if (bookId in user.bookIds){
+                user.bookIds.splice(user.bookIds.indexOf(bookId), 1);
+                
             }
 
-            users.updateBooks(id, bookIds);
-            res.send(JSON.stringify({success : 'yes'}));
+            user.save(function(err){
+                if (err){
+                    res.redirect('/error');
+                    return;
+                }
+                res.send(JSON.stringify({success : 'yes'}));
+            });
         });
     });
 };
@@ -127,26 +139,30 @@ exports.deleteBook = function(req, res){
   receiving oldPassword, and newPassword.
  */
 exports.changePassword = function(req, res){
-    var id = req.session.id;
-    var oldPassword = req.query.oldPassword;
-    var newPassword = req.query.newPassword;
+    var id = req.session.userId;
+    var oldPassword = req.body.oldPassword;
+    var newPassword = req.body.newPassword;
 
     if (!id){
         res.redirect('/login');
+        return;
     }
 
-    users.findById(id, function(err, data){
-        if (err || !data || data.password !== oldPassword){
+    users.findById(id, function(err, user){
+        if (err || !user || user.password !== oldPassword){
             res.redirect('/error');
+            return;
         }
 
-        users.updatePassword(id, newPassword, function(err){
+        user.password = newPassword;
+        user.save(function(err){
             if (err){
                 res.redirect('/error');
-            } else {
-                res.send(JSON.stringify({success : yes}));
+                return;
+            }  else {
+                res.send(JSON.stringify({success : 'yes'}));
             }
-        });
+        });        
     });
 };
 

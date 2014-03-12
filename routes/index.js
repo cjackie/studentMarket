@@ -2,7 +2,6 @@
 /*
  * GET home page.
  */
-
 //models
 var Book = require('./models/Book');
 var User = require('./models/User');
@@ -46,13 +45,13 @@ exports.register = function(req, res){
     var password = req.body.password;
     var password2 = req.body.password2;
     var numAndLetters = /^[a-zA-Z]*\d*$/;
-    var sbuEmail = /^\w+@stonybrook.edu$/;
+    var sbuEmail = /^\w+\.*\w+@stonybrook.edu$/;
     var confirmationCode = Math.random()*10000000000000000 + '';
     
     var register = function(err, data){
         if (data) {
             //name has been taken
-            redirect('/error');
+            res.redirect('/error');
             return;
         } else {
             users.addUser({
@@ -75,17 +74,24 @@ exports.register = function(req, res){
         }
     }
 
+
     //checking
     if (username && email && password && password2){
-       if (username == typeof 'string' && email == typeof 'string'){
-           if (username.match(numAndLetters) && email.match(sbuEmail)){
-               if(password == password2){
-                   //add a new user
-                   users.findByName(username, register);
-               }
-           }
-       }
+        if (username.match(numAndLetters) && email.match(sbuEmail)){
+            if(password == password2){
+                //add a new user
+                users.findByName(username, register);
+            } else {
+                res.redirect('/error');
+            }
+        }
+        else{
+            res.redirect('/error');
+        }
+    } else {
+        res.redirect('/error');
     }
+
 };
 
 exports.infoDisplay = function(req, res){
@@ -97,22 +103,23 @@ exports.infoDisplay = function(req, res){
   activate the user
  */
 exports.confirm = function(req, res){
-    var sequence = req.param.activatedSequence;
-    var username = req.param.username;
+    var sequence = req.param('activateSequence');
+    var username = req.param('username');
+    
     var activateCB = function(err, user){
         if (err || !user){
             res.redirect('/error');
             return;
         }
         if (user.confirmationCode == sequence){
-            users.updateStatus(user._id, true, function(err){
+            user.activated = true;
+            user.save(function(err){
                 if (err){
-                    redirect('/error');
-                    return;
-                } else {
-                    res.render('confirmation');
+                    res.redirect('/error');
                 }
             });
+            res.render('confirmation');
+            
         } else {
             res.redirect('/error');
             return
@@ -129,31 +136,26 @@ exports.confirm = function(req, res){
 exports.login2 = function(req, res){
     var username = req.body.username;
     var password = req.body.password;
-
+    
     users.findByName(username, function(err, user){
-        if (user.password == password){
-            req.session.id = user._id;
+        if (user.password == password && user.activated){
+            req.session.userId = user._id;
             res.json({success : 'yes'});
         } else {
             res.json({success : 'no'});
         }
     });
+
+
 };
 
 /*
   retrive user's data
  */
 exports.profile = function(req, res){
-    var id = req.session.id;
+    var id = req.session.userId;
     var bookIds;
-    var localBooks = [];
 
-    var addBook = function(err, book){
-        if (!err && book){
-            localBooks.push(book);
-        }
-    };
-    
     var render = function(err, user){
         if (err || !user){
             res.redirect('/error');
@@ -161,13 +163,23 @@ exports.profile = function(req, res){
         }
         bookIds = user.bookIds;
         if (bookIds.length > 0){
-            bookIds.foreach(function(id){
-                books.findById(id, addBook);
-            });
-            res.render('profile',{
-                user : user,
-                books : localBooks
-            });
+            var localBooks = [];
+            var counter = 0;
+            for (var i = 0; i < bookIds.length; i++){
+                counter++;
+                books.findById(bookIds[i], function(err, book){
+                    if (!err && book){
+                        localBooks.push(book);
+                    }
+                    counter--;
+                    if (counter === 0){
+                        res.render('profile', {
+                            user : user,
+                            books : localBooks
+                        });
+                    }
+                });
+            }
         } else {
             res.render('profile',{
                 user : user,
@@ -190,8 +202,7 @@ exports.profile = function(req, res){
   return cart number
  */
 exports.market = function(req, res){
-    var id = req.session.id;
-
+    var id = req.session.userId;
     if (!id){
         res.redirect('/login');
         return;
@@ -203,7 +214,7 @@ exports.market = function(req, res){
             return;
         }
 
-        res.render('market', { cartNum : user.cart.lenght });
+        res.render('market', { cartNum : user.cart.length });
     });
 };
 
@@ -212,7 +223,7 @@ exports.market = function(req, res){
   return books that are in the cart
  */
 exports.cart = function(req, res){
-    var id = req.session.id;
+    var id = req.session.userId;
 
     if (!id){
         res.redirect('/login');
@@ -231,7 +242,7 @@ exports.cart = function(req, res){
                 return;
             }
 
-            res.render('cart', booksInCart);
+            res.render('cart', {books:booksInCart});
         });
     });
 };
@@ -241,7 +252,7 @@ exports.cart = function(req, res){
   log out. destroy session
  */
 exports.logout = function(req, res){
-    var id = req.session.id;
+    var id = req.session.userId;
 
     if (!id){
         res.redirect('login');

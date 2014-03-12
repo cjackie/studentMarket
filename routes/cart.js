@@ -2,7 +2,6 @@
   ajax for cart page
  */
 //models
-
 var mailer = require('./helper/mailer');
 var Book = require('./models/Book');
 var User = require('./models/User');
@@ -13,29 +12,27 @@ var users = new User();
   delete a book from user's cart. return {success : yes or no}
  */
 exports.deleteItem = function(req, res){
-    var id = req.session.id;
+    var id = req.session.userId;
     var bookId = req.query.bookId;
 
     if (!id || !bookId){
         res.redirect('/login');
+        return;
     }
 
     users.findById(id, function(err, user){
         if (err || !user){
             res.redirect('/error');
+            return;
         }
 
-        var newArr = [];
         var index = user.cart.indexOf(bookId);
-
         if (index < 0){
             res.send(JSON.stringify({success:'no'}));
         }
 
-        newArr = user.cart.slice(0,index);
-        newArr.push(user.cart.slice(index+1));
-
-        users.updateCart(id, newArr, function(err){
+        user.cart.splice(index,1);
+        user.save(function(err){
             if (err){
                 res.send(JSON.stringify({success:'no'}));
             }
@@ -48,39 +45,34 @@ exports.deleteItem = function(req, res){
   notify owners of books that someone will buy or sell their books via
   email.
   return {success: yes or no}
+
+  side note: messy.. one thing i learned from debugging this function was 
+  that, sub function with a name like var func = function(){} has no access
+  to 'parent' functions' variable. closure doesnt work in that case.
+
  */
 exports.submit = function(req, res){
-    var id = req.session.id;
-    var bookIds = req.body.bookIds;
-    
+    var id = req.session.userId;
+
     if (!id){
         res.redirect('/login');
+        return;
     }
-
-    var receivers = [];
- 
-    if (!Array.isArray(bookIds)){
-        res.redirect('/error');
-    }
-
-    //make email content
-    var makeText = function(username, email,bookNames,types){
-        var text = username + ' wants your book, contact him: ' + email + '\n' + 'books requested:\n';
-        for (var i = 0; i < types.length; i++){
-            text += bookNames[i] + ' for' + types[i] + ' \n';
-        }
-        return text;
-     
-    };
     
     //called when the query is completed.
-    var sendMails = function(receivers){
+    var sendMails = function(receivers, user){
+
+        if (receivers.length === 0){
+            res.send(JSON.stringify({success:'no'}));
+        }
+
         var uniqueEmails = [];
         var uniqueReceivers = [];
         
         //ok, use for loop.. which I'm familliar with.
         for (var i = 0; i < receivers.length; i++){
             if (!(receivers[i].email in uniqueEmails)){
+                uniqueReceivers[i] = {};
                 uniqueReceivers[i].name = receivers[i].name;
                 uniqueReceivers[i].email = receivers[i].email;
                 uniqueReceivers[i].bookNames = [receivers[i].bookName];
@@ -91,65 +83,108 @@ exports.submit = function(req, res){
                 //find the duplicate
                 var j;
                 for (j = 0; i < uniqueReceivers.length; i++){
-                    if (uniqueReceivers[i].email==receivers[i].email){
-                        uniqueReceivers[i].bookNames.push(receivers[i].bookName);
-                        uniqueReceivers[i].types.push(receivers[i].type);
+                    if (uniqueReceivers[j].email==receivers[i].email){
+                        uniqueReceivers[j].bookNames.push(receivers[i].bookName);
+                        uniqueReceivers[j].types.push(receivers[i].type);
                         break;
                     }
                 }
             }
         }
-        //get sender
-        users.findById(id, function(err, user){
-            if (err || !user){
-                res.redirect('/error');
+
+        //make email content
+        var makeText = function(username, email,bookNames,types){
+
+            var text = '<html>' + username + ' wants your book, contact him: ' + email + '<br>' + 'books requested:<br>';
+            for (var i = 0; i < types.length; i++){
+                text += bookNames[i] + ' for' + types[i] + ' <br>';
             }
-            //now no same emails being sent.
-            for (var i = 0; i < uniqueReceivers; i++){
-                var data = {};
-                data.subject('Book request from a student');
-                data.to(uniqueReceivers[i].email);
-                for (var j = 0; j < uniqueReceivers[i].bookNames.length; j++){
-                    data.text = makeText(user.username, user.email,
-                             uniqueReceivers[i].bookNames,
-                             uniqueReceivers[i].types);
+            return text+'</html>';
+            
+        };
+
+        //now no same emails being sent.
+        for (var i = 0; i < uniqueReceivers.length; i++){
+            var data = {};
+            data.subject = 'Book request from a student';
+            data.to = uniqueReceivers[i].email;
+            for (var j = 0; j < uniqueReceivers[i].bookNames.length; j++){
+                data.text = makeText(user.username, user.email,
+                                     uniqueReceivers[j].bookNames,
+                                     uniqueReceivers[j].types);
+            }
+            
+            mailer.sendMail(data, function(err){
+                if (!err){
+                    res.send(JSON.stringify({success:'no'}));
                 }
-                mailer.sendMail(data);
-            }
-        });
+                res.send(JSON.stringify({success:'yes'}));
+            });
+        }
     };
 
     //query
-    var counter = 0;
-    bookIds.forEach(function(bookId, i){
-        counter++;
+    users.findById(id, function(err, user){
+        var bookIds = user.cart;
 
-        books.findById(bookId, function(err, book){
-            if (err || !book){
+        var counter = 0;
+        var receivers = [];
+        var that = this;
+        
+        //checking if error occured
+        var error = false;
+        bookIds.forEach(function(bookId, i){
+
+            counter++;
+
+            //prevent somehow indefinite loop
+            if (counter > 30){
+                error = true;
                 res.redirect('/error');
+                return;
             }
             
-            receivers[i].bookName = book.title;
-            receivers[i].type = book.type;
-           
-            users.findById(book.ownerId, function(err, user){
-                if (err || !user){
+            //lol... sigh
+            if (error){
+                return;
+            }
+            //index of books
+            var pos = 0;
+            books.findById(bookId, function(err, book){
+                if (err || !book){
                     res.redirect('/error');
+                    return;
                 }
-
-                receivers[i].name = user.username;
-                receivers[i].email = user.email;
-                counter--;
-
-                //prevent somehow indefinite loop
-                if (counter > 30){
-                    res.redirect('/error');
+                
+                //user has the book!!
+                if (bookId in user.bookIds){
+                    counter--;
+                    return;
                 }
+                receivers[pos] = {};
+                receivers[pos].bookName = book.title;
+                receivers[pos].type = book.type;
+                
+                users.findByName(book.ownerName, function(err, owner){
 
-                //for query is completed
-                if (counter === 0){
-                    sendMails(receivers);
-                }
+                    if (err || !owner){
+                        res.redirect('/error');
+                        error = true;
+                        return;
+                    }
+
+                    receivers[pos].name = owner.username;
+                    receivers[pos].email = owner.email;
+
+                    counter--;
+                
+                    //for query is completed
+                    if (counter === 0){
+                        user.cart = [];
+                        user.save(); 
+                        sendMails(receivers, user);
+                    }
+                })
             });
         });
     });
