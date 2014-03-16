@@ -14,6 +14,7 @@ var path = require('path');
 var market = require('./routes/market');
 var profile = require('./routes/profile');
 var cart = require('./routes/cart');
+var ajaxRequest = require('./routes/ajaxRequest');
 
 var app = express();
 
@@ -28,7 +29,7 @@ app.use(express.urlencoded());
 app.use(express.methodOverride());
 //enable session
 app.use(express.cookieParser());
-app.use(express.session({ secret: 'p!550ff'}));
+app.use(express.session({ secret: '77kolikilo'}));
 
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
@@ -64,6 +65,9 @@ app.get('/market/ajax/addToCard', market.addToCart);
 //ajax requests for cart page
 app.post('/cart/ajax/submit', cart.submit);
 app.get('/cart/ajax/deleteItem', cart.deleteItem);
+
+//other ajax request
+app.get('/testUsername', ajaxRequest.testUsername);
 
 //error
 app.get('/error', routes.error);
