@@ -1,0 +1,33 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/lib/bootstrap.min.css')
+  body
+    .container
+      .row
+        .alert.alert-danger(style='width:370px;margin:auto;margin-top:50px;visibility:hidden')
+          strong#alert-text
+        form#login(style='width:400px;margin:auto;', action='#', role='form')
+          .col-lg-12
+            .form-group
+              label(for='username') Username:
+              .input-group
+                input#username.form-control(type='text', required='', placeholder='username', name='username')
+                span.input-group-addon
+                  i.glyphicon.glyphicon-ok.form-control-feedback
+            .form-group
+              label(for='password') Password:
+              .input-group
+                input#password.form-control(type='password', required='', placeholder='password', name='password')
+                span.input-group-addon
+                  i.glyphicon.glyphicon-ok.form-control-feedback
+            input#submit.btn.btn-info.pull-left(type='submit', value='Submit', name='submit')
+      script(src='http://code.jquery.com/jquery-1.11.0.min.js')
+      script(src='javascripts/lib/bootstrap.min.js')
+      script(src='javascripts/login.js')
+      
+      
+  
+      
+    

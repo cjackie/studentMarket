@@ -1,5 +1,42 @@
-extends layout
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/lib/bootstrap.min.css')
+  body
+    .container
+      .row
+        .jumbotron
+          h1 Student Market
+          p="Don't you think text books are overpriced? "
+          p="Why not buy books from your peers."
+          p="Try this website!"
+          p="You can search books others have posted."
+          p="You can post books that you want to sell."
+          a.btn.btn-primary.btn-lg(href='/signup') sign up
+          span="     Or     "
+          a.btn.btn-primary.btn-lg(href='/login') log in
+      .row
+        h2 book list:
+        table.table.table-striped
+          tr
+            th department
+            th class
+            th title
+            th date
+            th type
+            th owner name
+          each book in books
+            tr
+              td=book.department
+              td=book.classNum
+              td=book.title
+              td=book.createdDate.toDateString()
+              td=book.type
+              td=book.ownerName
+        p.text-center='for more, please login'
 
-block content
-  h1= title
-  p Welcome to #{title}
+              
+  script(scr='http://code.jquery.com/jquery-1.11.0.min.js')
+  script(scr='javascripts/lib/bootstrap.min.js')
+  
