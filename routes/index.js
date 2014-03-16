@@ -22,7 +22,9 @@ var helper = require('./helper/helperFunctions');
   pages
 */
 exports.index = function(req, res){
-    res.render('index');
+    books.getSome(5, function(err, _books){
+        res.render('index', {books : _books});
+    });
 };
 
 exports.signup = function(req, res){
@@ -136,8 +138,16 @@ exports.confirm = function(req, res){
 exports.login2 = function(req, res){
     var username = req.body.username;
     var password = req.body.password;
+
+    if (!username || !password){
+        res.redirect('/error');
+    }
     
     users.findByName(username, function(err, user){
+        if (err || !user){
+            res.json({success : 'no'});
+            return;
+        }
         if (user.password == password && user.activated){
             req.session.userId = user._id;
             res.json({success : 'yes'});
