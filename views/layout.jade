@@ -2,6 +2,45 @@ doctype html
 html
   head
     title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/stylesheets/lib/bootstrap.min.css')
+    if cssFiles
+      each css in cssFiles
+        link(rel='stylesheet', href='/stylesheets/'+css)
   body
+    div.navbar.navbar-default.navbar-fixed-top(role='navigation')
+      div.container
+        div.navbar-header
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(href='#') Student Market
+        div.navbar-collapse.collapse
+          ul.nav.navbar-nav
+            li#marketTag
+              a(href='/market') Market
+            li#profileTag
+              a(href='/myprofile') Profile
+            li#cartTag
+              a(href='/cart') Cart
+            li.dropdown
+              a.dropdown-toggle(href='#', data-toggle='dropdown')
+                | Tools
+                b.caret
+              ul.dropdown-menu
+                li
+                  a(href='#') coming up
+          ul.nav.navbar-nav.navbar-right
+            li
+              a(href='/logout') Logout
     block content
+
+  script(src='http://code.jquery.com/jquery-1.11.0.min.js')
+  script(src='/javascripts/lib/bootstrap.min.js')
+  if jsFiles
+    each js in jsFiles
+      script(src='/javascripts/'+js)
+    
+  
+

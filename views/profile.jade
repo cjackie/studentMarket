@@ -1,0 +1,100 @@
+extends layout
+
+block content
+  .container(style='margin-top:80px')
+    .col-md-3
+      ul.nav.nav-pills.nav-stacked.nav-tabs
+        li(style='padding:10px 15px')
+          strong=user.username
+        li.active
+          a(href='#books', data-toggle='tab') Books Listed
+        li
+          a(href='#list', data-toggle='tab') Post New Books
+        li
+          a(href='#setting', data-toggle='tab') Setting
+    .col-md-9
+      div.tab-content
+        div.tab-pane.active#books
+          h2 Books:
+          table.table.table-striped
+            tr
+              th department
+              th class
+              th title
+              th date
+              th type
+              th remove
+            each book in books
+              tr
+                td=book.department
+                td=book.classNum
+                td=book.title
+                td=book.createdDate.toDateString()
+                td=book.type
+                td
+                  button.close.pull-left(aria-hidden='true', type='button') ×
+
+        div.tab-pane#list
+          #addBookAlert.alert.alert-danger(style='visibility:hidden')
+            strong
+          .row
+            .col-md-3
+              strong Department*
+            .col-md-2
+              strong class num*
+            .col-md-4
+              strong title*
+            .col-md-2
+              strong author*
+            .col-md-1
+              strong price
+          form.form#addBooks(role='form', data-num='1')
+            .row
+              .col-md-3
+                label.sr-only(for='department1')
+                input.form-control#department1(type='text', placeholder='e.g. ESE')
+              .col-md-2.form-group
+                label.sr-only(for='classNum1')
+                input.form-control#classNum1(type='text', placeholder='e.g. 124')
+              .col-md-4.form-group
+                label.sr-only(for='title1')
+                input.form-control#title1(type='text', placeholder='e.g. introduction to computer engineering')
+              .col-md-2.form-group
+                label.sr-only(for='author1')
+                input.form-control#author1(type='text', placeholder='e.g. Paul Scherz')
+              .col-md-1.form-group
+                label.sr-only(for='price1')
+                input.form-control#price1(type='text')
+            .row.text-center
+              a.text-center#addRow(href='#') add another book
+            .row.text-center
+              input#submit.btn.btn-primary(type='submit', value='Submit',name='submit')
+        div.tab-pane#setting
+          h1 setting
+          a(data-toggle='modal', data-target='#modal', href='#', style='margin:auto') change my password
+        #modal.modal.fade(aria-hidden='true', aria-labelledby='myModalLabel', role='dialog', tabindex='-1')
+          .modal-dialog
+            .modal-content
+              .modal-header
+                button.close(aria-hidden='true', data-dismiss='modal', type='button') ×
+                h4#myModalLabel.modal-title Change Password
+              .modal-body
+                #addBookAlert.alert.alert-danger(style='display:none')
+                  strong
+                form.form#changePassword
+                  .form-group
+                    label(for='oldPassword') Old Password:
+                    input#oldPassword.form-control(type='password', placeholder='old password')
+                  .form-group
+                    label(for='newPassword') New Password:
+                    input#newPassword.form-control(type='password', placeholder='new password')
+                  .form-group
+                    label(for='oldPassword') Password Again:
+                    input#newPassword2.form-control(type='password', placeholder='new password')
+              .modal-footer
+                button.btn.btn-default(data-dismiss='modal', type='button') Close
+                button.btn.btn-primary(type='button') Save changes
+        
+        
+
+  
