@@ -185,7 +185,8 @@ exports.profile = function(req, res){
                     if (counter === 0){
                         res.render('profile', {
                             user : user,
-                            books : localBooks
+                            books : localBooks,
+                            jsFiles : ['profile.js']
                         });
                     }
                 });
@@ -193,7 +194,8 @@ exports.profile = function(req, res){
         } else {
             res.render('profile',{
                 user : user,
-                books : []
+                books : [],
+                jsFiles : ['profile.js']
             });
         }
     }
