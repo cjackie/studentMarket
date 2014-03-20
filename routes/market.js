@@ -30,7 +30,7 @@ exports.getBooks = function(req, res){
             return;
         }
 
-        res.send(JSON.stringify(data));
+        res.json(data);
     });
 };
 
@@ -60,9 +60,9 @@ exports.addToCart = function(req, res){
         user.cart.push(bookId);
         user.save(function(err){
             if (err){
-                res.send(JSON.stringify({success:"no"}));
+                res.json({success:"no"});
             }
-            res.send(JSON.stringify({success:"yes"}));
+            res.json({success:"yes"});
         });
     });
 };

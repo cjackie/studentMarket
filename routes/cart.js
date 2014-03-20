@@ -28,15 +28,15 @@ exports.deleteItem = function(req, res){
 
         var index = user.cart.indexOf(bookId);
         if (index < 0){
-            res.send(JSON.stringify({success:'no'}));
+            res.json({success:'no'});
         }
 
         user.cart.splice(index,1);
         user.save(function(err){
             if (err){
-                res.send(JSON.stringify({success:'no'}));
+                res.json({success:'no'});
             }
-            res.send(JSON.stringify({success:'yes'}));
+            res.json({success:'yes'});
         });
     });
 };
@@ -63,7 +63,7 @@ exports.submit = function(req, res){
     var sendMails = function(receivers, user){
 
         if (receivers.length === 0){
-            res.send(JSON.stringify({success:'no'}));
+            res.json({success:'no'});
         }
 
         var uniqueEmails = [];
@@ -116,9 +116,9 @@ exports.submit = function(req, res){
             
             mailer.sendMail(data, function(err){
                 if (!err){
-                    res.send(JSON.stringify({success:'no'}));
+                    res.json({success:'no'});
                 }
-                res.send(JSON.stringify({success:'yes'}));
+                res.json({success:'yes'});
             });
         }
     };

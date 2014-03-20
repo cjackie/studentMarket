@@ -53,7 +53,7 @@ exports.addBook = function(req, res){
                     res.redirect('/error');
                     return;
                 } else {
-                    res.send(JSON.stringify({success : 'yes'}));
+                    res.json({success : 'yes'});
                 }   
             });        
         });
@@ -128,7 +128,7 @@ exports.deleteBook = function(req, res){
                     res.redirect('/error');
                     return;
                 }
-                res.send(JSON.stringify({success : 'yes'}));
+                res.json({success : 'yes'});
             });
         });
     });
@@ -160,7 +160,7 @@ exports.changePassword = function(req, res){
                 res.redirect('/error');
                 return;
             }  else {
-                res.send(JSON.stringify({success : 'yes'}));
+                res.json({success : 'yes'});
             }
         });        
     });
