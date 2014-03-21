@@ -13,13 +13,13 @@ var users = new User();
 
 exports.testUsername = function(req, res){
     var username = req.query.username;
-    console.log(username);
+    
     if (!username){
         res.json({availibility: 'no'});
     }
     
     users.findByName(username, function(err, data){
-        if (err || data){
+        if (data){
             res.json({availibility: 'no'});
         } else {
             res.json({availibility: 'yes'});

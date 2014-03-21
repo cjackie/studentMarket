@@ -149,11 +149,14 @@ exports.changePassword = function(req, res){
     }
 
     users.findById(id, function(err, user){
-        if (err || !user || user.password !== oldPassword){
+        if (err || !user){
             res.redirect('/error');
             return;
         }
-
+        if(user.password !== oldPassword){
+            res.json({success : 'no1'});
+            return;
+        }
         user.password = newPassword;
         user.save(function(err){
             if (err){
