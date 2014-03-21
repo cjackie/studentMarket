@@ -21,24 +21,37 @@ block content
               th department
               th class
               th title
+              th author
               th date
               th type
+              th price
               th remove
             each book in books
               tr
                 td=book.department
                 td=book.classNum
                 td=book.title
+                td=book.author
                 td=book.createdDate.toDateString()
                 td=book.type
+                if (book.price == -1)
+                  td='NA'
+                else
+                  td=book.price
                 td
-                  button.close.pull-left(aria-hidden='true', type='button') ×
+                  button.deleteBook.close.pull-left(data-bookId=book._id, aria-hidden='true', type='button') ×
 
         div.tab-pane#list
           #addBookAlert.alert.alert-danger(style='visibility:hidden')
             strong
           .row
-            .col-md-3
+            #type.btn-group.pull-right(data-toggle='buttons')
+              label#buy.btn.btn-primary Buy
+                input(type='radio', name='options')
+              label#sell.btn.btn-primary Sell
+                input(type='radio', name='options')
+          .row
+            .col-md-2
               strong Department*
             .col-md-2
               strong class num*
@@ -46,11 +59,11 @@ block content
               strong title*
             .col-md-2
               strong author*
-            .col-md-1
+            .col-md-2
               strong price
           form.form#addBooks(role='form', data-num='1')
-            .row
-              .col-md-3
+            .row#lastRow
+              .col-md-2
                 label.sr-only(for='department1')
                 input.form-control#department1(type='text', placeholder='e.g. ESE')
               .col-md-2.form-group
@@ -62,11 +75,11 @@ block content
               .col-md-2.form-group
                 label.sr-only(for='author1')
                 input.form-control#author1(type='text', placeholder='e.g. Paul Scherz')
-              .col-md-1.form-group
+              .col-md-2.form-group
                 label.sr-only(for='price1')
                 input.form-control#price1(type='text')
             .row.text-center
-              a.text-center#addRow(href='#') add another book
+              a.text-center#addRow(href='javascript:void(0)') add another book
             .row.text-center
               input#submit.btn.btn-primary(type='submit', value='Submit',name='submit')
         div.tab-pane#setting
@@ -79,21 +92,24 @@ block content
                 button.close(aria-hidden='true', data-dismiss='modal', type='button') ×
                 h4#myModalLabel.modal-title Change Password
               .modal-body
-                #addBookAlert.alert.alert-danger(style='display:none')
-                  strong
-                form.form#changePassword
-                  .form-group
-                    label(for='oldPassword') Old Password:
-                    input#oldPassword.form-control(type='password', placeholder='old password')
-                  .form-group
-                    label(for='newPassword') New Password:
-                    input#newPassword.form-control(type='password', placeholder='new password')
-                  .form-group
-                    label(for='oldPassword') Password Again:
-                    input#newPassword2.form-control(type='password', placeholder='new password')
+                #successTag(style='display:none')
+                  h2.text-success you have successfully updated your password
+                #changeBody
+                  #changePasswordAlert.alert.alert-danger(style='display:none')
+                    strong
+                  form.form#changePassword
+                    .form-group
+                      label(for='oldPassword') Old Password:
+                      input#oldPassword.form-control(type='password', placeholder='old password')
+                    .form-group
+                      label(for='newPassword') New Password:
+                      input#newPassword.form-control(type='password', placeholder='new password')
+                    .form-group
+                      label(for='oldPassword') Password Again:
+                      input#newPassword2.form-control(type='password', placeholder='new password')
               .modal-footer
                 button.btn.btn-default(data-dismiss='modal', type='button') Close
-                button.btn.btn-primary(type='button') Save changes
+                button#submitPassword.btn.btn-primary(type='button') Save changes
         
         
 
