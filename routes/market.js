@@ -23,7 +23,8 @@ exports.getBooks = function(req, res){
         return;
     }
     
-    var criteria = JSON.parse(req.query.criteria);    
+    var criteria = req.query.criteria;
+    console.log(criteria);
     books.searchBooks(criteria, function(err, data){
         if (err || !data){
             res.redirect('/error');
