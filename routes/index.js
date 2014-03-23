@@ -226,7 +226,11 @@ exports.market = function(req, res){
             return;
         }
 
-        res.render('market', { cartNum : user.cart.length });
+        res.render('market', {
+            cartNum : user.cart.length,
+            jsFiles : ['lib/moment.min.js', 'lib/daterangepicker.js', 'market.js'],
+            cssFiles : ['lib/daterangepicker-bs3.css']
+        });
     });
 };
 
