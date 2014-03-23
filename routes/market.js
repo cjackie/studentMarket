@@ -24,7 +24,6 @@ exports.getBooks = function(req, res){
     }
     
     var criteria = req.query.criteria;
-    console.log(criteria);
     books.searchBooks(criteria, function(err, data){
         if (err || !data){
             res.redirect('/error');
