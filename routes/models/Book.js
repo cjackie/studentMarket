@@ -71,6 +71,7 @@ Book.prototype.searchBooks = function(criteria, callback){
         classNum : criteria.classNum
     }).where('createdDate')
       .gt(criteria.createdDate)
+      .lt(criteria.endDate)
       .exec(callback);
 };
 
