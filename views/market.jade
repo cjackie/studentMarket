@@ -1,0 +1,37 @@
+extends layout
+
+block content
+  .container(style='margin-top:80px')
+    .col-md-4
+      .panel.panel-primary
+        .panel-heading Search
+        .panel-body
+          #alert.alert.alert-danger(style='display:none')
+            strong
+          form#form.form(role='form')
+            .from-group
+              #type.btn-group(data-toggle='buttons')
+                label#buy.btn.btn-primary Buy
+                  input(type='radio', name='options')
+                label#sell.btn.btn-primary Sell
+                  input(type='radio', name='options')
+            .form-group
+              label(for='department') Department
+              input#department.form-control(type='text')
+            .form-group
+              label(for='classNum') Class Number
+              input#classNum.form-control(type='text')
+            .form-group
+              label(for='date') Date Range
+              input#date.form-control(type='text', data-start='', data-end='')
+            input#submit.btn.btn-primary(type='submit',name='submit')
+    #content.col-md-8
+
+
+
+
+
+
+
+
+    
