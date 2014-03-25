@@ -60,7 +60,7 @@ app.post('/myprofile/ajax/changePassword', profile.changePassword);
 
 //ajax requests for market page
 app.get('/market/ajax/getBooks', market.getBooks);
-app.get('/market/ajax/addToCard', market.addToCart);
+app.get('/market/ajax/addToCart', market.addToCart);
 
 //ajax requests for cart page
 app.post('/cart/ajax/submit', cart.submit);
