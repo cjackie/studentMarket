@@ -258,7 +258,11 @@ exports.cart = function(req, res){
                 return;
             }
 
-            res.render('cart', {books:booksInCart});
+            res.render('cart',
+                       {
+                           books:booksInCart,
+                           jsFiles : ['cart.js']
+                       });
         });
     });
 };
