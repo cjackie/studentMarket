@@ -9,7 +9,6 @@
 <li>report bugs</li>
 <li>fix bugs</li>
 </ul>
-note: please send pull-requests to experiment branch.
 <hr>
 ### Design
 The design follows MVC design paradigm:<br>
