@@ -1,0 +1,15 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/lib/bootstrap.min.css')
+  body
+    .container
+      .row(style="width:600px;margin:auto")
+        .col-md-9
+          h2.text-danger="An error occur. Please contact us there is a bug."
+          h2.text-danger="Or you tried to hack the website.. Why not join our developer team to make "
+            a(href='https://github.com/cjackie/studentMarket', target='_blank')="it"
+            | &nbsp;better
+        .col-md-3
+          img(src='images/error.jpg',  width='200px')
