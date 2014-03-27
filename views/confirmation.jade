@@ -1,5 +1,13 @@
-extends layout
+doctype html
+html
+  head
+    title Activated
+    link(rel='stylesheet', href='/stylesheets/lib/bootstrap.min.css')
+  body
+    .container
+      .row(style="width:600px;margin:auto")
+        h2.text-success You have activated your account. click
+          a(href='/login')=' here '
+          |to login
+        
 
-block content
-  h1 confirm
-  p confirmOk
