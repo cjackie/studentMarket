@@ -1,0 +1,43 @@
+extends layout
+
+block content
+  .container(style='margin-top:80px')
+    if books.length !== 0
+      .row
+        h2='Notify them that you are interested in these books'
+  
+      .row#body
+        table.table.table-hover
+          tr
+            th Owner
+            th Title
+            th Author
+            th Price
+            th Remove
+          each book in books
+            tr(data-id=book._id)
+              td=book.ownerName
+              td=book.title
+              td=book.author
+              if (book.price === -1)
+                td='NA'
+              else
+                td=book.price
+              td
+                a(href='javascript:void')
+                  span.remove.glyphicon.glyphicon-remove(data-id=book._id)
+        form#form.form.text-center
+          input.btn.btn-primary(type='submit', value='Submit', name='submit')
+      div.progress.progress-striped.active(style='display:none')
+        div.progress-bar.progress-bar-success(role='progressbar',aria-valuenow='0',aria-valuemin='0', data-num='0', aria-valuemax='100', style='width: 0%')
+      #final.row(style='display:none')
+        .text-success='A email has been sent'
+        .text-danger='Something went wrong..Contact us'
+    else
+      h2.text-center.text-info No books in the cart
+  
+            
+  
+  
+  
+        
