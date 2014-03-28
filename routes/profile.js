@@ -118,9 +118,9 @@ exports.deleteBook = function(req, res){
                 return;
             }
 
-            if (bookId in user.bookIds){
-                user.bookIds.splice(user.bookIds.indexOf(bookId), 1);
-                
+            var index = user.bookIds.indexOf(bookId);
+            if (index >= 0){
+                user.bookIds.splice(index, 1);
             }
 
             user.save(function(err){
