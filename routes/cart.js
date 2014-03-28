@@ -25,18 +25,20 @@ exports.deleteItem = function(req, res){
             res.redirect('/error');
             return;
         }
-
+        
         var index = user.cart.indexOf(bookId);
         if (index < 0){
             res.json({success:'no'});
+            return;
         }
 
         user.cart.splice(index,1);
         user.save(function(err){
             if (err){
                 res.json({success:'no'});
+            } else {
+                res.json({success:'yes'});
             }
-            res.json({success:'yes'});
         });
     });
 };
@@ -64,6 +66,7 @@ exports.submit = function(req, res){
 
         if (receivers.length === 0){
             res.json({success:'no'});
+            return;
         }
 
         var uniqueEmails = [];
@@ -116,9 +119,10 @@ exports.submit = function(req, res){
             
             mailer.sendMail(data, function(err){
                 if (!err){
+                    res.json({success:'yes'});
+                } else {
                     res.json({success:'no'});
                 }
-                res.json({success:'yes'});
             });
         }
     };
