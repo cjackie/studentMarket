@@ -54,7 +54,6 @@ $(document).ready(function(){
         
         $.post('/cart/ajax/submit', {},
                function(data){
-                   alert(data.success+counter);
                    if (counter === 0){
                        if (data.success === 'yes'){
                            clearInterval(progress);
