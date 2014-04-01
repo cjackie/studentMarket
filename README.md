@@ -20,6 +20,21 @@ The design follows MVC design paradigm:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;node_modules folder.. We don't need to worry about it. It just contains all dependencies. For example express, mongodb, mongoose and jade.<br>
 <img src="http://s30.postimg.org/qud5gbr75/chart.png" alt="flowchart"> <br>
 <hr>
-### How to run it
-&nbsp;&nbsp;&nbsp;&nbsp;first have mongodb and node installed. git clone this repo, then move to the directory and run app.js. <br>
-&nbsp;&nbsp;&nbsp;&nbsp;then open up browser, type in "localhost:3000/" and hit enter.
+### Install Locally
+
+To install do the following:
+
+1. Get the code
+
+        https://github.com/cjackie/studentMarket.git
+        
+2. Install node dependencies
+
+        cd studentMarket
+        npm install .
+
+3. Run the app
+
+        node run.js
+
+4. Should now be running at <http://localhost:3000>
