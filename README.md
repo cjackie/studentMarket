@@ -21,8 +21,9 @@ The design follows MVC design paradigm:<br>
 <img src="http://s30.postimg.org/qud5gbr75/chart.png" alt="flowchart"> <br>
 <hr>
 ### Install Locally
+First have Node.js, MongoDB and npm installed
 
-To install do the following:
+Then do the following:
 
 1. Get the code
 
