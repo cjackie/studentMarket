@@ -64,21 +64,20 @@ Book.prototype.addBook = function(newBook, callback){
 
 //search books based on criteria, assuming data is good and complete
 Book.prototype.searchBooks = function(criteria, callback){
-    
+    var criteriaRefine = {};
     //if get rid of undefine element, or give a default value
-    if (!criteria.department) delete criteria.department;
-    if (!criteria.classNum) delete criteria.classNum;
+    if (criteria.department) criteriaRefine.department = criteria.department;
+    if (criteria.classNum) criteriaRefine.classNum = criteria.classNum;
     
     //default is one year ago
     if (!criteria.createdDate){
         criteria.createdDate = new Date() - 31556952000;
         criteria.endDate = new Date();
     }
-    
-    BookModel.where({
-        department : criteria.department,
-        classNum : criteria.classNum
-    }).where('createdDate')
+
+    console.log(criteriaRefine);
+    BookModel.where(criteriaRefine)
+      .where('createdDate')
       .gt(criteria.createdDate)
       .lt(criteria.endDate)
       .exec(callback);
