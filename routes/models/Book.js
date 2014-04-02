@@ -11,7 +11,6 @@ var ObjectId = mongoose.Schema.ObjectId;
   data structure of a book
  */
 var bookSchema = new Schema({
-    type : String,
     department : String,
     classNum : String,
     title : String,
@@ -65,8 +64,18 @@ Book.prototype.addBook = function(newBook, callback){
 
 //search books based on criteria, assuming data is good and complete
 Book.prototype.searchBooks = function(criteria, callback){
+    
+    //if get rid of undefine element, or give a default value
+    if (!criteria.department) delete criteria.department;
+    if (!criteria.classNum) delete criteria.classNum;
+    
+    //default is one year ago
+    if (!criteria.createdDate){
+        criteria.createdDate = new Date() - 31556952000;
+        criteria.endDate = new Date();
+    }
+    
     BookModel.where({
-        type : criteria.type,
         department : criteria.department,
         classNum : criteria.classNum
     }).where('createdDate')
