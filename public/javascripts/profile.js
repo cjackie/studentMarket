@@ -65,21 +65,8 @@ $(document).ready(function(){
                 'classNum' : classNum,
                 'title' : title,
                 'author' : author,
-                'price' : price,
+                'price' : price
             });
-        }
-
-        //check type
-        var typeDiv = $('#type');
-        var type;
-        if (typeDiv.children().eq(0).hasClass('active')){
-            type = typeDiv.children().eq(0).attr('id');
-        } else if (typeDiv.children().eq(1).hasClass('active')){
-            type = typeDiv.children().eq(1).attr('id');
-        } else {
-            $('#addBookAlert strong').html('please indicate you want to buy books or sell books.');
-            $('#addBookAlert').css({'visibility' : 'visible'});
-            return;
         }
 
 
@@ -94,8 +81,7 @@ $(document).ready(function(){
                       'classNum' : book.classNum,
                       'title' : book.title,
                       'author' : book.author,
-                      'price' : book.price,
-                      'type' : type
+                      'price' : book.price
                   }, function(data){
                       counter--;
                       if (data.success != 'yes'){

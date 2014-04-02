@@ -15,10 +15,6 @@ $(document).ready(function(){
                 'Since Last 3 Month' : [moment().subtract('month', 3).startOf('month'), moment()]
             },
             endDate: moment()
-        },
-        function(start, end){
-            $('#date').attr('data-start', start);
-            $('#date').attr('data-end', end);
         }
     );
 
@@ -58,6 +54,8 @@ $(document).ready(function(){
     
     //build html to display books
     var constructTable = function(books){
+        //remove previous content
+        $('#content').empty();
         if (books.length !== 0){
             //head
             var html = '<div class="panel panel-primary">  <div class="panel-heading">Results</div>';
@@ -83,11 +81,12 @@ $(document).ready(function(){
             html += '</table> </div>';
     
             //insert html
-            $('#content').empty().append($(html));
+            $('#content').append($(html));
         } else {
             
             //no result
-            $('#content').empty();
+            var html = '<h2 class="text-info" style="margin:auto"> no book was found</h2>';
+            $('#content').append(html);
         }
         
     };
@@ -96,26 +95,26 @@ $(document).ready(function(){
     //form is submitted
     $('#form').submit(function(event){
         event.preventDefault();
-
-        var type;
-        if ($('#buy').hasClass('active')){
-            type = 'buy';
-        } else if ($('#sell').hasClass('active')){
-            type = 'sell';
-        }
-
+        
         var department = $('#department').val();
         var classNum = $('#classNum').val();
-        var createdDate = $('#date').attr('data-start');
-        var endDate = $('#date').attr('data-end');
+        var range = $('#date').val();
+        var createdDate, endDate;
+        if (range){
+            if (!range.match(/^\d{2}\/\d{2}\/\d{4} - \d{2}\/\d{2}\/\d{4}$/)){
+                $('#alert strong').html('date has wrong format');
+                $('#alert').slideDown();
+                return;
+            } else {
+                createdDate = moment(range.split('-')[0], 'MM/DD/YYYY') + 0;
+                endDate = moment(range.split('-')[1], 'MM/DD/YYYY') + 0;
+            }
+        }
+
 
         //checking integrity of data
-        if (!(department && classNum && createdDate && endDate)){
-            $('#alert strong').html('Please complete them');
-            $('#alert').slideDown();
-            return;
-        } else if (!type){
-            $('#alert strong').html('Select Buy or Sell');
+        if (!department){ 
+            $('#alert strong').html('Complete deparment');
             $('#alert').slideDown();
             return;
         } else {
@@ -127,7 +126,6 @@ $(document).ready(function(){
         
         //prepare data
         var criteria = {
-            'type' : type,
             'department' : department,
             'classNum' : classNum,
             'createdDate' : createdDate,
@@ -135,7 +133,6 @@ $(document).ready(function(){
         };
 
         //ajax
-        
         $.get('/market/ajax/getBooks',
               {
                   'criteria' : criteria

@@ -14,19 +14,19 @@ exports.getBooks = function(req, res){
     var id = req.session.userId;
     
     if (!id){
-        res.json({success = 'no'});
+        res.json({success : 'no'});
         return;
     }
 
     if (!req.query.criteria){
-        res.json({success = 'no'});
+        res.json({success : 'no'});
         return;
     }
     
     var criteria = req.query.criteria;
     books.searchBooks(criteria, function(err, data){
         if (err || !data){
-        res.json({success = 'no'});
+            res.json({success : 'no'});
             return;
         }
 

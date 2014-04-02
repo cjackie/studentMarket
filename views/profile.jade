@@ -9,7 +9,7 @@ block content
         li.active
           a(href='#books', data-toggle='tab') Books Listed
         li
-          a(href='#list', data-toggle='tab') Post New Books
+          a(href='#list', data-toggle='tab') Post Books
         li
           a(href='#setting', data-toggle='tab') Setting
     .col-md-9
@@ -23,7 +23,6 @@ block content
               th title
               th author
               th date
-              th type
               th price
               th remove
             each book in books
@@ -33,7 +32,6 @@ block content
                 td=book.title
                 td=book.author
                 td=book.createdDate.toDateString()
-                td=book.type
                 if (book.price == -1)
                   td='NA'
                 else
@@ -44,12 +42,6 @@ block content
         div.tab-pane#list
           #addBookAlert.alert.alert-danger(style='visibility:hidden')
             strong
-          .row
-            #type.btn-group.pull-right(data-toggle='buttons')
-              label#buy.btn.btn-primary Buy
-                input(type='radio', name='options')
-              label#sell.btn.btn-primary Sell
-                input(type='radio', name='options')
           .row
             .col-md-2
               strong Department*

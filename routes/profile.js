@@ -25,7 +25,6 @@ var helper = require('./helper/helperFunctions');
 
 exports.addBook = function(req, res){
     var id = req.session.userId;
-    var type = req.query.type;
     var department = req.query.department;
     var classNum = req.query.classNum;
     var title = req.query.title;
@@ -71,7 +70,7 @@ exports.addBook = function(req, res){
     } 
 
     //if there is one item missing. error
-    if (!(department && classNum && title && author) || (type != "buy" && type != "sell")){
+    if (!(department && classNum && title && author)) {
         res.redirect('/error');
         return;
     }
@@ -80,7 +79,6 @@ exports.addBook = function(req, res){
     bookId = new ObjectId();
     var newBook = {
         _id : bookId,
-        type : type,
         department : department,
         classNum : classNum,
         title : title,
