@@ -29,7 +29,7 @@ app.use(express.urlencoded());
 app.use(express.methodOverride());
 //enable session
 app.use(express.cookieParser());
-app.use(express.session({ secret: '77kolikilo'}));
+app.use(express.session({ secret: '77kolikilolo'}));
 
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));

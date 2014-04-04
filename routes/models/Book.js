@@ -1,10 +1,7 @@
-var mongoose = require('mongoose');
-var db = mongoose.connect('mongodb://localhost/studentMarket', function(err){
-    if (err){
-        console.error('error occured when connecting to db');
-    }
-}); 
+//connect to database
+require('./config');
 
+var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = mongoose.Schema.ObjectId;
 /*
