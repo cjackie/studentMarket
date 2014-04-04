@@ -69,7 +69,7 @@ exports.register = function(req, res){
             mailer.sendMail({
                 to : email,
                 subject : 'Confirmation',
-                text : 'activate you account by click http://localhost:3000/confirmation/' + confirmationCode + '/' + username
+                text : 'activate you account by click http://studentmarket.herokuapp.com/confirmation/' + confirmationCode + '/' + username
             }, function(){
                 res.render('register');
             });
