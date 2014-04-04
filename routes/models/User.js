@@ -1,6 +1,3 @@
-//connect to database
-require('./config');
-
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = mongoose.Schema.ObjectId;
