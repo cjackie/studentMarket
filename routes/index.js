@@ -290,3 +290,11 @@ exports.error = function(req, res){
     res.render('error');
 };
 
+/*
+  about page
+ */
+exports.about = function(req, res){
+    res.render('about',{
+        jsFiles : ['about.js']
+    });
+};

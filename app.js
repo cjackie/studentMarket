@@ -69,6 +69,7 @@ app.get('/myprofile', routes.profile);
 app.get('/market', routes.market);
 app.get('/cart', routes.cart);
 app.get('/logout', routes.logout);
+app.get('/about', routes.about);
 
 //ajax requests for myprofile page
 app.get('/myprofile/ajax/addBook', profile.addBook);
