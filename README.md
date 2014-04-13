@@ -18,6 +18,8 @@ The design follows MVC design paradigm:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Views is the folder contains views... obviously..<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Public folder contains relevent CSS, Javascript, img, and so on, which support rendering of a view. They are exposed to clients.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;node_modules folder.. We don't need to worry about it. It just contains all dependencies. For example express, mongodb, mongoose and jade.<br>
+<hr>
+### Architecture
 <img src="http://s30.postimg.org/qud5gbr75/chart.png" alt="flowchart"> <br>
 <hr>
 ### Install Locally
@@ -38,3 +40,13 @@ To install do the following:
         node run.js
 
 4. Should now be running at <http://localhost:3000>
+
+<hr>
+### Test Accounts
+
+I have created several test accounts for those of you don'have stony brook email, but want to try out the website:<br>
+username: test1<br>
+password: 123456<br>
+username: test2<br>
+password: 123456<br>
+
