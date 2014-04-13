@@ -13,7 +13,7 @@ var path = require('path');
 var market = require('./routes/market');
 var profile = require('./routes/profile');
 var cart = require('./routes/cart');
-var mobile require('./routes/mobile');
+var mobile = require('./routes/mobile');
 var ajaxRequest = require('./routes/ajaxRequest');
 
 var app = express();
