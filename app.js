@@ -94,6 +94,10 @@ app.get('/error', routes.error);
 //mobile page
 app.get('/mobile', mobile.mobile);
 
+//mobile ajax
+app.post('mobile/login', mobile.login);
+app.get('mobile/cartBooks', mobile.cartBooks);
+
 
 
 //when urls are not found

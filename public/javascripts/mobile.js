@@ -18,15 +18,17 @@ $(document).ready(function(){
         if (username) $("#profileName").html(username);
         
         var html = "";
-        for (int i = 0; i < books.length; i++){
+        for (var i = 0; i < books.length; i++){
+            var price = (books[i].price === -1)? "NA" : books[i].price;
+            
             html += "<div " + "data-id='"+books[i]._id+"' style='background-color:white;border:solid 0.1px;border-radius:3px;padding-top:10px'>";
             html += "<p> Title: " + books[i].title + "</p>";
             html += "<p> author: " + books[i].title + "</p>";
             html += "<p> department: " + books[i].department + "</p>";
             html += "<p> classNum : " + books[i].classNum + "</p>";
-            html += "<p> price : " + books[i].price + "</p>";
+            html += "<p> price : " + price + "</p>";
             html += "<p> date : " + new Date(books[i].createdDate) + "</p>";
-            html += "<a class='profileDelete' href='javascript:void'> deletet the book </a>"
+            html += "<a class='profileDelete' href='javascript:void'> deletet the book </a>";
             html += "</div>";
         }
 
@@ -41,20 +43,19 @@ $(document).ready(function(){
 
     function market(books){
         /*
-          TODO
           clear and then append
          */
         var content = $("#searchContent");
         content.html("");
 
         var html = "";
-        for (int i = 0; i < books.length; i++){
+        for (var i = 0; i < books.length; i++){
             html += "<div style='background-color:white;border:solid 0.1px;border-radius:3px;padding-top:10px'>";
             html += "<p> Title: " + books[i].title + "</p>";
             html += "<p> author: " + books[i].title + "</p>";
             html += "<p> price : " + books[i].price + "</p>";
             html += "<p> date : " + new Date(books[i].createdDate) + "</p>";
-            html += "<a class='marketAdd' "+"data-id='"+books[i]._id+"' href='javascript:void'> add the book </a>"
+            html += "<a class='marketAdd' "+"data-id='"+books[i]._id+"' href='javascript:void'> add the book </a>";
             html += "</div>";
         }
 
@@ -68,6 +69,7 @@ $(document).ready(function(){
       login page
      */
     $("#loginSubmit").click(function(){
+        alert("hi");
         var username = $("#loginUsername").val();
         var password = $("#loginPassword").val();
 
@@ -84,7 +86,7 @@ $(document).ready(function(){
                function(data){
                    if (data.success === "yes"){
                        session = true;
-                       profile(data.books, username);
+                       profile(data.books, data.username);
                    } else {
                        message("wrong password or username");
                    }
@@ -144,7 +146,7 @@ $(document).ready(function(){
         var self = $(this).parent();
 
         var id =self.attr("data-id");
-        id = id.substr(1, id.length-2)
+        id = id.substr(1, id.length-2);
 
         $.get("/myprofile/ajax/deleteBook",
               {
@@ -208,11 +210,8 @@ $(document).ready(function(){
     $("#searchContent").on("click", ".marketAdd", function(){
         var se = $(this);
         var id = self.attr("data-id");
-        id = id.substr(1, id.length-2)
+        id = id.substr(1, id.length-2);
 
-        /*
-          TODO ajax
-         */
         $.get("/market/ajax/addToCart",
               {
                   "bookId" : id
@@ -222,8 +221,7 @@ $(document).ready(function(){
                       self.removeClass("marketAdd");
                       self.html("added!");
                   }
-              }
-        
+              });
     });
 
                      
@@ -237,13 +235,28 @@ $(document).ready(function(){
             return;
         }
 
-        /*
-          TODO
-          build cart
-         */
-
-        
-        
+        //--!
+        $.get("mobile/cartBooks", {},
+              function(data){
+                  var books = data.books;
+                  var content = $("#cartBooks");
+                  content.html("");
+                  
+                  var html = "";
+                  for (var i = 0; i < books.length; i++){
+                      var price = (books[i].price === -1)? "NA" : books[i].price;
+                      
+                      html += "<div style='background-color:white;border:solid 0.1px;border-radius:3px;padding-top:10px'>";
+                      html += "<p> Owner: " + books[i].ownerName + "</p>";
+                      html += "<p> Title: " + books[i].title + "</p>";
+                      html += "<p> author: " + books[i].title + "</p>";
+                      html += "<p> price : " + price + "</p>";
+                      html += "</div>";
+                  }
+                  
+                  content.html($(html));
+                  $("#cart").page();
+              });
     });
 
 
