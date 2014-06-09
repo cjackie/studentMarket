@@ -1,3 +1,0 @@
-
-var req = require("supertest");
-console.log(req("http://localhost:3000/"));
