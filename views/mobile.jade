@@ -1,0 +1,150 @@
+doctype html
+html
+  head
+    title Student Market
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    link(rel='stylesheet', href='http://code.jquery.com/mobile/1.2.1/jquery.mobile-1.2.1.min.css')
+    script(src='http://code.jquery.com/jquery-1.8.3.min.js')
+    script(src='http://code.jquery.com/mobile/1.2.1/jquery.mobile-1.2.1.min.js')
+    script(src='javascripts/mobile.js')
+  body
+    //home page 
+    #home(data-role='page')
+      div(data-role='header', data-theme='b')
+        h2 Student Market
+      .ui-body(data-theme='b')
+        p A website for Stony Brook students exchanging books
+        fieldset.ui-grid-a
+          .ui-block-a
+            a(href='#login', data-role='button') login
+          .ui-block-b
+            a(href='#signup', data-role='button') signup
+    //login page 
+    #login(data-role='page')
+      div(data-role='header', data-theme='b')
+        a(href='#home', data-icon='back') Back
+        h2 Student Market
+      .ui-body
+        label(for='loginUsername') Username:
+        input#loginUsername(type='text', name='name')
+        label(for='loginPassword') Password:
+        input#loginPassword(type='password', name='name')
+        a#loginSubmit(data-role='button') Submit
+    //signup page 
+    #signup(data-role='page')
+      div(data-role='header', data-theme='b')
+        a(href='#home', data-icon='back') Back
+        h2 Student Market
+      .ui-body
+        label(for='signupUsername') Username:
+        input#signupUsername(type='text', name='name')
+        label(for='signupEmail') Stony Brook Email:
+        input#signupEmail(type='email', name='name')
+        label(for='signupPassword') Password:
+        input#signupPassword(type='password', name='name')
+        a#signupSubmit(data-role='button') Submit
+    //profile page 
+    #profile(data-role='page')
+      div(data-role='header', data-theme='b')
+        h2 Student Market
+        a.ui-btn-right.logout(style='float: right;', href='#logout') logout
+      div(data-role='navbar')
+        ul
+          li
+            a.ui-btn-active.ui-state-persist(href='#profile') profile
+          li
+            a(href='#market') market
+          li
+            a.changeToCart(href='#cart') cart
+      div
+        h2#profileName dd
+      #profileBooks
+        | books
+      div
+        a(href='#profileAddBook', data-rel='dialog', data-role='button') Add a Book
+    //profile page: pop up to add a book
+    #profileAddBook(data-role='dialog')
+      div(data-role='header', data-theme='b')
+        h2 add a book
+      .ui-body-c(data-theme='c', data-role='content')
+        label(for='profileDepartment') department*:
+        input#profileDepartment(type='text', name='name')
+        label(for='profileClassNum') class number*:
+        input#profileClassNum(type='text', name='name')
+        label(for='profileTitle') title*:
+        input#profileTitle(type='text', name='name')
+        label(for='profileAuthor') author*:
+        input#profileAuthor(type='text', name='name')
+        label(for='profilePrice') price:
+        input#profilePrice(type='number', name='name')
+        a#profileSubmit(data-role='button') submit
+    //market page 
+    #market(data-role='page')
+      div(data-role='header', data-theme='b')
+        h2 Student Market
+        a.ui-btn-right.logout(style='float: right;', href='#logout') logout
+      div(data-role='navbar')
+        ul
+          li
+            a(href='#profile') profile
+          li
+            a.ui-btn-active.ui-state-persist(href='#market') market
+          li
+            a.changeToCart(href='#cart') cart
+      .ui-body
+        label(for='marketDepartment') department*:
+        input#marketDepartment(type='text', name='name')
+        label(for='marketClassNum') class number:
+        input#marketClassNum(type='text', name='name')
+        label.select(for='marketDateRange') date range:
+        select#marketDateRange(name='date range')
+          option(value='0') last 7 days
+          option(value='1') last month
+          option(value='2') last three months
+          option(value='3') last year
+        a#marketSearch(data-role='button') search
+    //search results from market page
+    #searchResult(data-role='page')
+      div(data-role='header', data-theme='b')
+        h2 Student Market
+        a.ui-btn-left(data-icon='back', href='#market') back
+      div(data-role='navbar')
+        ul
+          li
+            a(href='#profile') profile
+          li
+            a.ui-btn-active(href='#market') market
+          li
+            a.changeToCart(href='#cart') cart
+      #searchContent.ui-body
+    //cart page 
+    #cart(data-role='page')
+      div(data-role='header', data-theme='b')
+        h2 Student Market
+        a.ui-btn-right.logout(style='float: right;', href='#logout') logout
+      div(data-role='navbar')
+        ul
+          li
+            a(href='#profile') profile
+          li
+            a(href='#market') market
+          li
+            a.ui-btn-active.ui-state-persist(href='#cart') cart
+      #cartBooks
+        | books
+      div
+        a#cartSubmit(data-role='button') submit
+    //logout page 
+    #logout(data-role='page')
+      div(data-role='header', data-theme='b')
+        h2 Student Market
+        a.ui-btn-right.logout(style='float: right;', href='#logout') logoutS
+      div
+        h2 You have logged out
+    //message page(any message) 
+    #msg(data-role='dialog')
+      div(data-role='header', data-theme='b')
+        h2 Student Market
+      .ui-body-c(data-theme='c', data-role='content')
+        h2#msgMsg 22
+
