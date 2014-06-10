@@ -13,7 +13,6 @@ var path = require('path');
 var market = require('./routes/market');
 var profile = require('./routes/profile');
 var cart = require('./routes/cart');
-var mobile = require('./routes/mobile');
 var ajaxRequest = require('./routes/ajaxRequest');
 
 var app = express();
@@ -90,13 +89,6 @@ app.get('/testUsername', ajaxRequest.testUsername);
 
 //error
 app.get('/error', routes.error);
-
-//mobile page
-app.get('/mobile', mobile.mobile);
-
-//mobile ajax
-app.post('mobile/login', mobile.login);
-app.get('mobile/cartBooks', mobile.cartBooks);
 
 
 
