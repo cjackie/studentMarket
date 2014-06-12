@@ -16,9 +16,9 @@ describe("testing index.js", function() {
     });
 
     describe("signup page", function() {
-            
+        
         it("request signup page", function(done) {
-            request.get("/signup")
+            request.get("signup")
                 .expect(200, function(err, res) {
                     if (err) return "has err: " + err;
                     done();
@@ -34,24 +34,23 @@ describe("testing index.js", function() {
             console.log("this is sent: " + json);
             
             request.post("register")
-                .set("Content-Type", "json")
                 .send(json)
                 .expect(200, function(err, res) {
-                    if (err) return "no good!";
+                    if (err) throw err;
                     done();
                 });
         });
 
         it("request to signup with form", function(done) {
-            var username = "test" + 10000000000000*Math.random()
+            var username = "test" + 100000000000000000*Math.random()
                 ,formData = "username="+username+"&email=123@stonybrook.edu&password=11&password2=11";
-            console.log("this is sent: " + formData);
+            console.log("this is sent from form: " + formData);
 
             request.post("register")
-                .type("form")
                 .send(formData)
+                .timeout(3000)
                 .expect(200, function(err, res) {
-                    if (err) return "no good!";
+                    if (err) throw err;
                     done();
                 });
         });
@@ -59,15 +58,59 @@ describe("testing index.js", function() {
     });
 
     describe("login page", function() {
-            
+
+        beforeEach(function() {
+            this.username = "test";
+            this.password = "123456";
+        });
+        
         it("request login page", function(done) {
-            request.get("/")
+            request.get("login")
                 .expect(200, function(err, res) {
                     if (err) return "has err: " + err;
                     done();
                 });
         });
+        
+        it("try to login", function(done) {
+            var data = "username="+this.username+"&password="+this.password;
+            request.post("login2")
+                .send(data)
+                .timeout(3000)
+                .expect(200, function(err, res) {
+                    if (err) throw err;
+                    if (res.body.success == "no" || res.body.success != "yes") return "login failed";
+                    done();
+                });
+            
+        });
     });
+
+    describe("confirm page", function() {
+
+        beforeEach(function() {
+            this.conformationCode = 7328793865162879;
+            this.username = "chaoddd";
+            console.log("chaoddd will be activated with 7328793865162879");
+        });
+
+        it("request activation", function(done) {
+            request.get("confirmation")
+                .query({username: this.username, activateSequence: this.conformationCode})
+                .timeout(3000)
+                .expect(200, function(err, res){
+                    if (err) throw err;
+                    done();
+                });
+        });
+        
+    });
+
+    /*
+     TODO
+     profile, cart, market, logout, error, about, infoDisplay tests
+     */
+     
     
 
 });
